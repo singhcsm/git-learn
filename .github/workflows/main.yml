@@ -17,7 +17,7 @@ jobs:
     with:
         service_name: ${{ matrix.service.name}}
         service_dir: ${{ matrix.service.service_dir}}
-        commit_short: ${{ github.sha[0:7]}}
+        commit_short: ${{ steps.extract_commit.outputs.commit_short }}
     secrets: inherit
 
   build-app-docker-image:
@@ -31,6 +31,13 @@ jobs:
     with:
         service_name: ${{ matrix.service.name}}
         service_dir: ${{ matrix.service.service_dir}}
-        commit_short: ${{ github.sha[0:7]}}
+        commit_short: ${{ steps.extract_commit.outputs.commit_short }}
     secrets: inherit
 
+  extract-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get the commit short hash
+        id: extract_commit
+        run: |
+          echo "::set-output name=commit_short::$(git rev-parse --short=7 $GITHUB_SHA)"
