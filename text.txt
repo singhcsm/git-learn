@@ -3,10 +3,3 @@
 
 new changesgit 
 
-hello  world!
-
-sumesh world!
-
-stashed files
-
-inspect-!
