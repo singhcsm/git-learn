@@ -1,0 +1,22 @@
+name: Main Service CI/CD Pipeline
+
+on:
+  push:
+    paths:
+        - "backend/**"
+
+jobs:
+
+  test-and-lint:
+    strategy:
+        fail-fast: false
+        matrix:
+            service:
+                - { name: "backend", service_dir: "backend"}
+    uses: ./.github/workflows/lint-test.yml
+    with:
+        service_name: ${{ matrix.service.name}}
+        service_dir: ${{ matrix.service.service_dir}}
+        commit_short: ${{ github.sha}}
+    secrets: inherit
+

@@ -1,0 +1,31 @@
+name: CI/CD Pipeline for backend service
+
+on: 
+  workflow_call:
+    inputs:
+        commit_short:
+            required: true
+            type: string
+        service_name:
+            required: true
+            type: string
+        service_dir:
+            required: true
+            type: string
+
+jobs:
+  test-and-lint:
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ vars.NODE_VERSION }}
+
+      - name: Install dependency
+        working-directory: ${{ inputs.service_dir}}
+        run: npm i
+        
