@@ -7,7 +7,22 @@ on:
 
 jobs:
 
+  extract-commit:
+    runs-on: ubuntu-latest
+    outputs:
+      commit_short: ${{ steps.extract_commit.outputs.commit_short }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Extract commit short hash
+        id: extract_commit
+        run: |
+          echo "commit_short=$(git rev-parse --short=7 $GITHUB_SHA)" >> $GITHUB_ENV
+          echo "::set-output name=commit_short::$(git rev-parse --short=7 $GITHUB_SHA)"
+
   test-and-lint:
+    needs: extract-commit
     strategy:
         fail-fast: false
         matrix:
@@ -17,11 +32,11 @@ jobs:
     with:
         service_name: ${{ matrix.service.name}}
         service_dir: ${{ matrix.service.service_dir}}
-        commit_short: ${{ steps.extract_commit.outputs.commit_short }}
+        commit_short: ${{ needs.extract-commit.outputs.commit_short }}
     secrets: inherit
 
   build-app-docker-image:
-    needs: test-and-lint
+    needs: extract-commit
     strategy:
         fail-fast: false
         matrix:
@@ -31,13 +46,6 @@ jobs:
     with:
         service_name: ${{ matrix.service.name}}
         service_dir: ${{ matrix.service.service_dir}}
-        commit_short: ${{ steps.extract_commit.outputs.commit_short }}
+        commit_short: ${{ needs.extract-commit.outputs.commit_short }}
     secrets: inherit
 
-  extract-commit:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Get the commit short hash
-        id: extract_commit
-        run: |
-          echo "::set-output name=commit_short::$(git rev-parse --short=7 $GITHUB_SHA)"
