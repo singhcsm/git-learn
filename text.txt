@@ -1,4 +1,8 @@
  1st commit chandra --more
- 1st commit sumesh ks --more
+ 1st commit sumesh ks --more --many
 
-new changes
+new changesgit 
+
+hello  world!
+
+sumesh world!
