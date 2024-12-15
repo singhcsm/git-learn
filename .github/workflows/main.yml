@@ -17,7 +17,7 @@ jobs:
     with:
         service_name: ${{ matrix.service.name}}
         service_dir: ${{ matrix.service.service_dir}}
-        commit_short: ${{ github.sha}}
+        commit_short: ${{ github.sha[0:7]}}
     secrets: inherit
 
   build-app-docker-image:
@@ -31,6 +31,6 @@ jobs:
     with:
         service_name: ${{ matrix.service.name}}
         service_dir: ${{ matrix.service.service_dir}}
-        commit_short: ${{ github.sha}}
+        commit_short: ${{ github.sha[0:7]}}
     secrets: inherit
 
