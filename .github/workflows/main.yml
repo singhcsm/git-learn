@@ -20,3 +20,17 @@ jobs:
         commit_short: ${{ github.sha}}
     secrets: inherit
 
+  build-app-docker-image:
+    needs: test-and-lint
+    strategy:
+        fail-fast: false
+        matrix:
+            service:
+                - { name: "backend", service_dir: "backend"}
+    uses: ./.github/workflows/build-app-docker.yml
+    with:
+        service_name: ${{ matrix.service.name}}
+        service_dir: ${{ matrix.service.service_dir}}
+        commit_short: ${{ github.sha}}
+    secrets: inherit
+

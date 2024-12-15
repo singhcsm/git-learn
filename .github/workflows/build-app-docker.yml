@@ -1,0 +1,31 @@
+name: CI/CD Pipeline for backend service
+
+on: 
+  workflow_call:
+    inputs:
+        commit_short:
+            required: true
+            type: string
+        service_name:
+            required: true
+            type: string
+        service_dir:
+            required: true
+            type: string
+
+jobs:
+  test-and-lint:
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Log in to DockerHub
+        run: echo "${{ secrets.DOCKER_AUTH_TOKEN }}" | docker login -u "${{ vars.DOCKER_USERNAME }}" --password-stdin
+
+
+      - name: Build Docker Image
+        run: |
+          docker build -t ${{ vars.DOCKER_USERNAME}}/${{ inputs.service_name}}:${{ inputs.commit_short}}
+
+        
