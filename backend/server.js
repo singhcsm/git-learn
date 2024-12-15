@@ -13,4 +13,4 @@ app.post("/post", (req, res)=>{
     res.status(200).json({result:"success!", data: data})
 });
 
-app.listen(3000, ()=> console.log("server is listen on port: 3000")); //1-2-3
+app.listen(3000, ()=> console.log("server is listen on port: 3000")); //1-2-3-4

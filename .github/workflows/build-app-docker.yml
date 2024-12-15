@@ -26,6 +26,6 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build -t ${{ vars.DOCKER_USERNAME}}/${{ inputs.service_name}}:${{ inputs.commit_short}}
+          docker build -t ${{ vars.DOCKER_USERNAME}}/${{ inputs.service_name}}:${{ inputs.commit_short}} .
 
         
