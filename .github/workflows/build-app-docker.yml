@@ -19,6 +19,8 @@ jobs:
     steps: 
       - name: Checkout code
         uses: actions/checkout@v4
+
+        
         
       - name: Log in to DockerHub
         run: echo "${{ secrets.DOCKER_AUTH_TOKEN }}" | docker login -u "${{ vars.DOCKER_USERNAME }}" --password-stdin

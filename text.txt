@@ -1,12 +1,51 @@
- 1st commit chandra --more
- 1st commit sumesh ks --more --many
+name: Main Service CI/CD Pipeline
 
-new changesgit 
+on:
+  push:
+    paths:
+        - "backend/**"
 
+jobs:
 
-human!!!!
+  extract-commit:
+    runs-on: ubuntu-latest
+    outputs:
+      commit_short: ${{ steps.extract_commit.outputs.commit_short }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
+      - name: Extract commit short hash
+        id: extract_commit
+        run: |
+          echo "commit_short=$(git rev-parse --short=7 $GITHUB_SHA)" >> $GITHUB_ENV
+          echo "::set-output name=commit_short::$(git rev-parse --short=7 $GITHUB_SHA)"
 
-//16/01/1999//
+  test-and-lint:
+    needs: extract-commit
+    strategy:
+        fail-fast: false
+        matrix:
+            service:
+                - { name: "backend", service_dir: "backend"}
+    uses: ./.github/workflows/lint-test.yml
+    with:
+        service_name: ${{ matrix.service.name}}
+        service_dir: ${{ matrix.service.service_dir}}
+        commit_short: ${{ needs.extract-commit.outputs.commit_short }}
+    secrets: inherit
 
-//\\//\\//\\//\\
+  build-app-docker-image:
+    needs: extract-commit
+    strategy:
+        fail-fast: false
+        matrix:
+            service:
+                - { name: "backend", service_dir: "backend"}
+    uses: ./.github/workflows/build-app-docker.yml
+    with:
+        service_name: ${{ matrix.service.name}}
+        service_dir: ${{ matrix.service.service_dir}}
+        commit_short: ${{ needs.extract-commit.outputs.commit_short }}
+    secrets: inherit
+
