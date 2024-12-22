@@ -22,7 +22,7 @@ jobs:
         commit_short: ${{ steps.setup-context.outputs.COMMIT_SHORT }}
 
   test-and-lint:
-    needs: setup-context
+    needs: [setup-context, setup-context]
     strategy:
         fail-fast: false
         matrix:
@@ -37,7 +37,7 @@ jobs:
     secrets: inherit
 
   build-app-docker-image:
-    needs: test-and-lint
+    needs: [test-and-lint, setup-context ]
     strategy:
         fail-fast: false
         matrix:
