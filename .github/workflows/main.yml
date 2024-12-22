@@ -3,9 +3,8 @@ name: Main Service CI/CD Pipeline
 on:
   push:
     paths:
-        - "backend/**"
+      - "backend/**"
   workflow_dispatch:
-    
 
 jobs:
 
@@ -15,38 +14,39 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: set commit short 
-        run: echo "COMMIT_SHORT=$(echo ${{github.sha}} | cut -c1-7)" >> $GITHUB_ENV
+      - name: Set commit short
+        run: echo "COMMIT_SHORT=$(echo ${{ github.sha }} | cut -c1-7)" >> $GITHUB_ENV
 
     outputs:
-        commit_short: ${{ steps.setup-context.outputs.COMMIT_SHORT }}
+      commit_short: ${{ env.COMMIT_SHORT }}
 
   test-and-lint:
-    needs: [setup-context, setup-context]
+    needs: setup-context
+    runs-on: ubuntu-latest
     strategy:
-        fail-fast: false
-        matrix:
-            service:
-                - { name: "backend", service_dir: "backend"}
+      fail-fast: false
+      matrix:
+        service:
+          - { name: "backend", service_dir: "backend" }
     uses: ./.github/workflows/lint-test.yml
     with:
-        service_name: ${{ matrix.service.name}}
-        service_dir: ${{ matrix.service.service_dir}}
-        commit_short: ${{ steps.setup-context.outputs.COMMIT_SHORT }}
-        options: "install"
+      service_name: ${{ matrix.service.name }}
+      service_dir: ${{ matrix.service.service_dir }}
+      commit_short: ${{ needs.setup-context.outputs.commit_short }}
+      options: "install"
     secrets: inherit
 
   build-app-docker-image:
-    needs: [test-and-lint, setup-context ]
+    needs: [test-and-lint, setup-context]
+    runs-on: ubuntu-latest
     strategy:
-        fail-fast: false
-        matrix:
-            service:
-                - { name: "backend", service_dir: "backend"}
+      fail-fast: false
+      matrix:
+        service:
+          - { name: "backend", service_dir: "backend" }
     uses: ./.github/workflows/build-app-docker.yml
     with:
-        service_name: ${{ matrix.service.name}}
-        service_dir: ${{ matrix.service.service_dir}}
-        commit_short: ${{ steps.setup-context.outputs.COMMIT_SHORT }}
+      service_name: ${{ matrix.service.name }}
+      service_dir: ${{ matrix.service.service_dir }}
+      commit_short: ${{ needs.setup-context.outputs.commit_short }}
     secrets: inherit
-
