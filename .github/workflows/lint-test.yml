@@ -1,4 +1,4 @@
-name: CI/CD Pipeline for backend service
+name: Test and lint for backend service
 
 on: 
   workflow_call:

@@ -1,4 +1,4 @@
-name: CI/CD Pipeline for backend service
+name: Build app push to docker for backend service
 
 on: 
   workflow_call:

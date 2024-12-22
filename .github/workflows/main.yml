@@ -1,4 +1,4 @@
-name: Main Service CI/CD Pipeline
+name: Backend Service CI/CD Pipeline
 
 on:
   push:
