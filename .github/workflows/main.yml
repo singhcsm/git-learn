@@ -4,20 +4,22 @@ on:
   push:
     paths:
         - "backend/**"
+  workflow_dispatch:
+    
 
 jobs:
 
-  commit-short: 
+  setup-context:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set short github.sha
-        run: echo "COMMIT_SHORT=$(echo ${{ github.sha }} | cut -c1-7)" >> $GITHUB_ENV
+      - name: set commit short 
+        run: echo "COMMIT_SHORT=$(echo ${{github.sha}} | cut -c1-7)" >> $GITHUB_ENV
 
   test-and-lint:
-    needs: commit-short
+    needs: setup-context
     strategy:
         fail-fast: false
         matrix:
@@ -27,7 +29,7 @@ jobs:
     with:
         service_name: ${{ matrix.service.name}}
         service_dir: ${{ matrix.service.service_dir}}
-        commit_short: ${{ env.COMMIT_SHORT }}
+        commit_short: ${{  }}
         options: "install"
     secrets: inherit
 
@@ -42,6 +44,6 @@ jobs:
     with:
         service_name: ${{ matrix.service.name}}
         service_dir: ${{ matrix.service.service_dir}}
-        commit_short: ${{ env.COMMIT_SHORT }}
+        commit_short: ${{  }}
     secrets: inherit
 

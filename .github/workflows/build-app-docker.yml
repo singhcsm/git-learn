@@ -20,7 +20,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-        
+      - name: set commit short 
+        run: echo "COMMIT_SHORT=$(echo ${{github.sha}} | cut -c1-7)" >> $GITHUB_ENV 
         
       - name: Log in to DockerHub
         run: echo "${{ secrets.DOCKER_AUTH_TOKEN }}" | docker login -u "${{ vars.DOCKER_USERNAME }}" --password-stdin
@@ -29,10 +30,8 @@ jobs:
       - name: Build Docker Image
         working-directory: ${{ inputs.service_dir }}
         run: |
-          docker build -t ${{ vars.DOCKER_USERNAME}}/${{ inputs.service_name}}:${{ inputs.commit_short}} .
+          docker build -t ${{ vars.DOCKER_USERNAME}}/${{ inputs.service_name}}:${{ env.COMMIT_SHORT }} .
 
       - name: push image to DockerHub
         run: |
-          docker push ${{ vars.DOCKER_USERNAME}}/${{inputs.service_name}}:${{ inputs.commit_short}}
-
-        
+          docker push ${{ vars.DOCKER_USERNAME}}/${{inputs.service_name}}:${{ env.COMMIT_SHORT }}
