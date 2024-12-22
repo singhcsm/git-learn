@@ -22,7 +22,6 @@ jobs:
 
   test-and-lint:
     needs: setup-context
-    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
@@ -38,7 +37,6 @@ jobs:
 
   build-app-docker-image:
     needs: [test-and-lint, setup-context]
-    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
