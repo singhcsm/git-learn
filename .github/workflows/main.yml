@@ -11,8 +11,8 @@ jobs:
   setup-context:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      # - name: Checkout code
+      #   uses: actions/checkout@v4
 
       - name: Set commit short
         run: echo "COMMIT_SHORT=$(echo ${{ github.sha }} | cut -c1-7)" >> $GITHUB_ENV
