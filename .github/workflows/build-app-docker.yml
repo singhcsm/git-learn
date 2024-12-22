@@ -16,7 +16,7 @@ on:
 run-name: "Build and Push ${{ inputs.service_name}} image to ${{ vars.DOCKER_USERNAME }} Repository Hub"
 
 jobs:
-  test-and-lint:
+  build-node-app-docker-push:
     runs-on: ubuntu-latest
     steps: 
       - name: Checkout code
