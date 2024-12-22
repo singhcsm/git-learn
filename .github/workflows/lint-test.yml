@@ -15,6 +15,7 @@ on:
         options:
             required: true
             type: string
+run-name: "Lint and Test for ${{ inputs.service_name }} service"
 
 jobs:
   test-and-lint:

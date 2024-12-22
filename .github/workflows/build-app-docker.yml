@@ -13,6 +13,8 @@ on:
             required: true
             type: string
 
+run-name: "Build and Push ${{ inputs.service_name}} image to ${{ vars.DOCKER_USERNAME }} Repository Hub"
+
 jobs:
   test-and-lint:
     runs-on: ubuntu-latest

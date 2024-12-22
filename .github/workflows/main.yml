@@ -6,6 +6,8 @@ on:
       - "backend/**"
   workflow_dispatch:
 
+run-name: CI-CD for Backend Service
+
 jobs:
 
   setup-context:
