@@ -18,6 +18,9 @@ jobs:
       - name: set commit short 
         run: echo "COMMIT_SHORT=$(echo ${{github.sha}} | cut -c1-7)" >> $GITHUB_ENV
 
+    outputs:
+        commit_short: ${{ steps.setup-context.outputs.COMMIT_SHORT }}
+
   test-and-lint:
     needs: setup-context
     strategy:
@@ -29,7 +32,7 @@ jobs:
     with:
         service_name: ${{ matrix.service.name}}
         service_dir: ${{ matrix.service.service_dir}}
-        commit_short: ${{ github.sha[::7] }}
+        commit_short: ${{ steps.setup-context.outputs.COMMIT_SHORT }}
         options: "install"
     secrets: inherit
 
@@ -44,6 +47,6 @@ jobs:
     with:
         service_name: ${{ matrix.service.name}}
         service_dir: ${{ matrix.service.service_dir}}
-        commit_short: ${{ github.sha[::7] }}
+        commit_short: ${{ steps.setup-context.outputs.COMMIT_SHORT }}
     secrets: inherit
 
