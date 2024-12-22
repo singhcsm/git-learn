@@ -7,7 +7,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/api/get", (req, res) => {
-  res.send("ok!");
+  res.send("ok!!");
 });
 
 app.post("/post", (req, res) => {
