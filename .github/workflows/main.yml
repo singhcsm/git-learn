@@ -29,7 +29,7 @@ jobs:
     with:
         service_name: ${{ matrix.service.name}}
         service_dir: ${{ matrix.service.service_dir}}
-        commit_short: ${{ github.sha }}
+        commit_short: ${{ github.sha[::7] }}
         options: "install"
     secrets: inherit
 
@@ -44,6 +44,6 @@ jobs:
     with:
         service_name: ${{ matrix.service.name}}
         service_dir: ${{ matrix.service.service_dir}}
-        commit_short: ${{ github.sha }}
+        commit_short: ${{ github.sha[::7] }}
     secrets: inherit
 
